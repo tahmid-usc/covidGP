@@ -5,3 +5,6 @@ This project aims at building a forecast model for cumulative COVID-19 cases in 
 ![Total number of cases in South Carolina, USA](/plot/pred_SC_v.pdf "Logo Title Text 1")
 
 
+To generate your prediction using the model:
+ 1. Customize and run code/data.R
+ 2. Run code/main.R
