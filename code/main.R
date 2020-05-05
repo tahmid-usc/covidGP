@@ -6,18 +6,7 @@ library(kernlab)
 library(mvtnorm)
 source('code/functions.R')
 
-# Read data and transform date and cases
-
-
-covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
-covid$date <- as.Date(covid$date)
-covid <- covid %>% filter(state == "South Carolina") 
-mindate <- as.numeric(min(covid$date))
-covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
-
-
-plot(covid$t, covid$y)
-plot(covid$date, covid$cases)
+#run appropriate portion of data.R code file to load the data
 
 
 # Try to estimmate the intial values using nonlinear least square
@@ -84,6 +73,7 @@ preddt <- data.frame(posmu, mustar.pred, ll, ul)
 #save(preddt, file = 'pred_SC_v.csv')
 
 
+#plot predictions
 plot(datestar, posmu, lwd = 3, type = 'l', col = 2, main = 'Cumulative COVID-19 cases Prediction for South Carolina', xaxt = 'n', ylim = c(0, max(ul)), xlab = "Day", ylab = 'Cumulative cases')
 polygon(c(datestar,rev(datestar)),c(ll,rev(ul)),col=rgb (.1,.1,.1,.2),border=NA, xaxt = 'n')
 lines(datestar, posmu, lwd = 3, col = 2, xaxt = 'n')
