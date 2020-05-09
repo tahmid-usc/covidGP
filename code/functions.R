@@ -56,7 +56,7 @@ Hyper.ms <- function(x, y) {
   }
   
   hyp <- multistart(parmat=parmat, fn = marlik, method = 'Nelder-Mead',
-                    control=list(maxit = 100000, trace = 0, REPORT = 0))
+                    control=list(maxit = 100000, trace = 0))
   #print(hyp)
   return(hyp)
   

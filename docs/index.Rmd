@@ -1,5 +1,5 @@
 ---
-title: Covid-19 Confirmed case Prediction Using Gaussian Process Regression with Richard's
+title: Covid-19 Case Prediction Using Gaussian Process Regression with Richard's
   Growth Curve Prior
 author: "Tahmidul Islam"
 date: "5/8/2020"
@@ -10,7 +10,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
-## Covid-19 Confirmed case Predictionr
+## South Carolina
 
 
 ```{r, echo=FALSE}
@@ -105,6 +105,6 @@ covidGP <- function(State = "South Carolina") {
 
 
 ```{r, results='hide'}
-covidGP("Ohio")
+covidGP("South Carolina")
 ```
 
