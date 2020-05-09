@@ -14,7 +14,7 @@ covid <- covid.total
 
 covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
 covid$date <- as.Date(covid$date)
-covid <- covid %>% filter(state == "South Carolina") 
+covid <- covid %>% filter(state == "Ohio") 
 mindate <- as.numeric(min(covid$date))
 covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
 

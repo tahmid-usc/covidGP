@@ -15,7 +15,7 @@ dt <- as.data.frame(dt)
 nonlin <- nls(y ~ a / (1 + b0 * exp(- b1 * t))^v , data = dt, start = list(a = 1, b0 = 1, b1 = 1, v = 1))
 
 #Estimate hyperparameters (single starting value)
-theta <- Hyper(x = covid$t, y = covid$y, init.val = rep(1,1,1, coef(nonlin)))
+theta <- Hyper(x = covid$t, y = covid$y, init.val = rep(1,7))
 
 
 #Estimate hyperparamters (multistarts) (works better)
@@ -74,7 +74,7 @@ preddt <- data.frame(posmu, mustar.pred, ll, ul)
 
 
 #plot predictions
-plot(datestar, posmu, lwd = 3, type = 'l', col = 2, main = 'Cumulative COVID-19 cases Prediction for South Carolina', xaxt = 'n', ylim = c(0, max(ul)), xlab = "Day", ylab = 'Cumulative cases')
+plot(datestar, posmu, lwd = 3, type = 'l', col = 2, main = 'Cumulative COVID-19 cases Prediction for Ohio', xaxt = 'n', ylim = c(0, max(ul)), xlab = "Day", ylab = 'Cumulative cases')
 polygon(c(datestar,rev(datestar)),c(ll,rev(ul)),col=rgb (.1,.1,.1,.2),border=NA, xaxt = 'n')
 lines(datestar, posmu, lwd = 3, col = 2, xaxt = 'n')
 axis.Date(x = datestar, side = 1, format = '%m-%d', at = datestar)

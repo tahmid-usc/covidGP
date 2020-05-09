@@ -30,8 +30,8 @@ Hyper <- function(x, y, init.val = c(1,1,1,1,1,1,1)) {
   }
   
   hyp <- optim(par= init.val, fn = marlik, method = 'Nelder-Mead',
-               control=list(maxit = 10000))
-  print(hyp)
+               control=list(maxit = 10000, trace = 0))
+  #print(hyp)
   return(hyp$par)
   
 }
@@ -56,10 +56,35 @@ Hyper.ms <- function(x, y) {
   }
   
   hyp <- multistart(parmat=parmat, fn = marlik, method = 'Nelder-Mead',
-                    control=list(maxit = 10000))
+                    control=list(maxit = 100000, trace = 0))
   #print(hyp)
   return(hyp)
   
 }
 
 #---
+
+
+# Read covid data
+
+covid_data <- function (State  = 'South Carolina') {
+  covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
+  if(State == "US"){
+    # Total USA: transform date and cases
+    covid$date <- as.Date(covid$date)
+    covid.total <- covid %>% group_by(date) %>% summarize(cases = sum(cases)) 
+    covid <- covid.total}
+  else{
+    # Read data and transform date and cases
+    # change state name as desired
+    print(State)
+    covid$date <- as.Date(covid$date)
+    covid <- covid %>% dplyr:::filter(state == State) 
+    
+  }
+  
+  return(covid)
+}
+
+
+
