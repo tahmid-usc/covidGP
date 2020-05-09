@@ -20,7 +20,7 @@ library(readr)
 library(optimx)
 library(kernlab)
 library(mvtnorm)
-source('code/functions.R')
+source('functions.R')
 
 
 
