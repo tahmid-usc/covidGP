@@ -10,6 +10,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
+The numerical predictions are available in the <https://github.com/tahmid-usc/covidGP/tree/master/docs/prediction> [link] (Github website)
 ## South Carolina
 
 
@@ -28,9 +29,9 @@ covidGP <- function(State = "South Carolina") {
   # Read data and transform date and cases
   # change state name as desired
   
-  covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
-  covid$date <- as.Date(covid$date)
-  covid <- covid %>% filter(state == State) 
+  #covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
+  #covid$date <- as.Date(covid$date)
+  covid <- covid_data(State)
   mindate <- as.numeric(min(covid$date))
   covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
   
@@ -105,6 +106,197 @@ covidGP <- function(State = "South Carolina") {
 
 
 ```{r, results='hide'}
+covidGP("US")
+```
+
+
+```{r, results='hide'}
+covidGP("Alabama")
+```
+
+```{r, results='hide'}
+covidGP("Alaska")
+```
+```{r, results='hide'}
+covidGP("Arizona")
+```
+
+```{r, results='hide'}
+covidGP("California")
+```
+
+```{r, results='hide'}
+covidGP("Colorado")
+```
+
+```{r, results='hide'}
+covidGP("Connecticut")
+```
+
+```{r, results='hide'}
+covidGP("Delaware")
+```
+
+```{r, results='hide'}
+covidGP("District of Columbia")
+```
+
+```{r, results='hide'}
+covidGP("Florida")
+```
+
+```{r, results='hide'}
+covidGP("Georgia")
+```
+
+```{r, results='hide'}
+covidGP("Hawaii")
+```
+
+```{r, results='hide'}
+covidGP("Idaho")
+```
+
+```{r, results='hide'}
+covidGP("Illinois")
+```
+
+```{r, results='hide'}
+covidGP("Indiana")
+```
+
+```{r, results='hide'}
+covidGP("Iowa")
+```
+
+```{r, results='hide'}
+covidGP("Kansas")
+```
+
+```{r, results='hide'}
+covidGP("Kentucky")
+```
+
+```{r, results='hide'}
+covidGP("Louisiana")
+```
+
+```{r, results='hide'}
+covidGP("Maine")
+```
+
+```{r, results='hide'}
+covidGP("Maryland")
+```
+
+```{r, results='hide'}
+covidGP("Massachusetts")
+```
+
+```{r, results='hide'}
+covidGP("Michigan")
+```
+
+```{r, results='hide'}
 covidGP("South Carolina")
 ```
 
+```{r, results='hide'}
+covidGP("Minnesota")
+```
+
+```{r, results='hide'}
+covidGP("Mississippi")
+```
+
+```{r, results='hide'}
+covidGP("Missouri")
+```
+
+```{r, results='hide'}
+covidGP("Montana")
+```
+
+```{r, results='hide'}
+covidGP("Nebraska")
+```
+
+```{r, results='hide'}
+covidGP("Nevada")
+```
+
+```{r, results='hide'}
+covidGP("New Hampshire")
+```
+
+```{r, results='hide'}
+covidGP("Ohio")
+```
+
+```{r, results='hide'}
+covidGP("Oklahoma")
+```
+
+```{r, results='hide'}
+covidGP("Oregon")
+```
+
+```{r, results='hide'}
+covidGP("Pennsylvania")
+```
+
+```{r, results='hide'}
+covidGP("Puerto Rico")
+```
+
+```{r, results='hide'}
+covidGP("Rhode Island")
+```
+
+```{r, results='hide'}
+covidGP("South Carolina")
+```
+
+```{r, results='hide'}
+covidGP("South Dakota")
+```
+
+```{r, results='hide'}
+covidGP("Tennessee")
+```
+
+```{r, results='hide'}
+covidGP("Texas")
+```
+
+```{r, results='hide'}
+covidGP("Utah")
+```
+
+```{r, results='hide'}
+covidGP("Vermont")
+```
+
+```{r, results='hide'}
+covidGP("Virgin Islands")
+```
+
+```{r, results='hide'}
+covidGP("Virginia")
+```
+
+```{r, results='hide'}
+covidGP("Washington")
+```
+
+```{r, results='hide'}
+covidGP("West Virginia")
+```
+
+```{r, results='hide'}
+covidGP("Wisconsin")
+```
+
+```{r, results='hide'}
+covidGP("Wyoming")
+```
