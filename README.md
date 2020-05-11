@@ -8,3 +8,8 @@ To generate your prediction using the model:
 
  1. Customize and run code/data.R
  2. Run code/main.R
+
+
+Sample prediction:
+
+![South Carolina](/plot/pred_SC_v.png)
