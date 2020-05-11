@@ -12,4 +12,4 @@ To generate your prediction using the model:
 
 Sample prediction:
 
-![South Carolina]("/plot/NC.png")
+![South Carolina]("https://github.com/tahmid-usc/covidGP/blob/master/plot/NC.png")
