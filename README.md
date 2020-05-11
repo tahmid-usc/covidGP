@@ -12,4 +12,4 @@ To generate your prediction using the model:
 
 Sample prediction:
 
-![South Carolina]("/plot/South Carolina.png")
+![South Carolina]("/plot/NC.png")
