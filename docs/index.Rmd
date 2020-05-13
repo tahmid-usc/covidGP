@@ -10,9 +10,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
-The numerical predictions are available in the <https://github.com/tahmid-usc/covidGP/tree/master/docs/prediction> [link] (Github website)
-## South Carolina
-
+The numerical predictions are available in the [Github website] (https://github.com/tahmid-usc/covidGP/tree/master/docs/prediction)  
 
 ```{r, echo=FALSE}
 library(dplyr)
@@ -246,10 +244,6 @@ covidGP("Pennsylvania")
 ```
 
 ```{r, results='hide'}
-covidGP("Puerto Rico")
-```
-
-```{r, results='hide'}
 covidGP("Rhode Island")
 ```
 
@@ -275,10 +269,6 @@ covidGP("Utah")
 
 ```{r, results='hide'}
 covidGP("Vermont")
-```
-
-```{r, results='hide'}
-covidGP("Virgin Islands")
 ```
 
 ```{r, results='hide'}
