@@ -1,7 +1,4 @@
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
-
-# COVID-19 Confirmed Cumulative Case Projection
+# COVID-19 Case and Death in USA Projection
 ## Application of Gaussian Process Regression with Richard's Growth Curve Prior
 
 This project aims at building a forecast model for cumulative COVID-19 cases in USA.
