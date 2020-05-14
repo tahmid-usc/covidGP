@@ -109,7 +109,7 @@ covidGP <- function(State = "South Carolina") {
   write.csv(preddt, file = paste0('deaths/', State, '.csv'), row.names = F)
   save(theta.sort, file = paste0('deaths/', 'theta_', State, '.Rdata'))
 
-  png(file =  paste0('plot/deaths', State, '.png'))
+  png(file =  paste0('plot/deaths/', State, '.png'))
   #plot predictions
   plot(datestar, posmu, lwd = 3, type = 'l', col = 2, main = paste('Cumulative COVID-19 Deaths Prediction for', State), xaxt = 'n', ylim = c(0, max(ul)), xlab = "Day", ylab = 'Cumulative Deaths')
   polygon(c(datestar,rev(datestar)),c(ll,rev(ul)),col=rgb (.1,.1,.1,.2),border=NA, xaxt = 'n')
