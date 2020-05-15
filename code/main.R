@@ -6,13 +6,17 @@ library(kernlab)
 library(mvtnorm)
 source('code/functions.R')
 
-#run appropriate portion of data.R code file to load the data
+covid <- covid_data("Ohio")
+mindate <- as.numeric(min(covid$date))
+covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
+
 
 
 # Try to estimmate the intial values using nonlinear least square
 dt <- cbind(y = covid$y, t = covid$t)
 dt <- as.data.frame(dt)
-nonlin <- nls(y ~ a / (1 + b0 * exp(- b1 * t))^v , data = dt, start = list(a = 1, b0 = 1, b1 = 1, v = 1))
+nonlin <- nls(y ~ a / (1 + v * exp(- b1 * (t - b0)))^(1/v) , 
+              data = dt, start = list(a = 2, b0 = 2, b1 = 2, v = 2))
 
 #Estimate hyperparameters (single starting value)
 theta <- Hyper(x = covid$t, y = covid$y, init.val = rep(1,7))
