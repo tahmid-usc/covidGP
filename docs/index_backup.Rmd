@@ -1,6 +1,9 @@
 ---
 title: Covid-19 Case Prediction Using Gaussian Process Regression with Richard's
   Growth Curve Prior
+author: "Tahmidul Islam"
+date: "5/8/2020"
+output: html_document
 ---
 
 ```{r setup, include= FALSE}

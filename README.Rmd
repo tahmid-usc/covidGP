@@ -1,10 +1,9 @@
 ---
-title: "README"
+title: "COVID-19 Case and Death in USA Projection"
 author: "Tahmidul Islam"
-date: "5/15/2020"
-output: html_document
+date: 
+output: github_document
 ---
-# COVID-19 Case and Death in USA Projection
 ## Application of Gaussian Process Regression with Richard's Growth Curve Prior
 
 This project aims at building a forecast model for cumulative COVID-19 cases in USA.
