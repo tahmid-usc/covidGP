@@ -1,3 +1,10 @@
+---
+title: "README"
+author: "Tahmidul Islam"
+date: "5/15/2020"
+output: github_document
+---
+
 # COVID-19 Case and Death in USA Projection
 ## Application of Gaussian Process Regression with Richard's Growth Curve Prior
 
