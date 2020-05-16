@@ -13,9 +13,6 @@ knit: (function(input_file, encoding) {
 ## Application of Gaussian Process Regression with Richard's Growth Curve Prior
 
 This project aims at building a forecast model for cumulative COVID-19 cases in USA.
-To view projection on cumulative cases in US, go to: https://tahmid-usc.github.io/covidGP/
-For projection in CSV format, go to https://github.com/tahmid-usc/covidGP/tree/master/docs/prediction
-
 
 ### Model
 
@@ -39,5 +36,5 @@ Here $K$ is the kernel function, usually chosen to be Gaussian and used in this 
 
 A sample projection of cumulative number of confirmed cases for South Carolina is shown.
 
-![](docs/plot/South Carolina.png)
+
 
