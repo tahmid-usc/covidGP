@@ -5,8 +5,10 @@ navbar:
   left:
   - text: "Home"
     href: index.html
-  - text: "Case Prediction"
-    href: covidGP.html
+  - text: "Cases Prediction"
+    href: cases.html
+  - text: "Deaths Prediction"
+    href: deaths.html    
 output:
   html_document:
    theme: cosmo
