@@ -1,12 +1,10 @@
-name: "cars"
+name: "covidGP"
 output_dir: "docs"
 navbar:
-  title: "Cars"
+  title: "covidGP"
   left:
   - text: "Home"
    href: index.html
-  - text: "Speed and Distance"
-   href: speed-and-distance.html
 output:
   html_document:
  theme: cosmo
