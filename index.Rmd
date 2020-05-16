@@ -1,8 +1,10 @@
 ---
-title: "Application of Gaussian Process Regression with Richard's Growth Curve Prior"
+title: "COVID-19 Total Cases and Deaths Projection"
 ---
 
-This project aims at building a forecast model for cumulative COVID-19 cases in USA.
+## Application of Gaussian Process Regression with Richard's Curve Prior
+
+Navigate using buttons above to view total cases and deaths projections.
 
 ### Gaussian Process Model
 

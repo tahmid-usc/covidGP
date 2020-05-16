@@ -6,7 +6,7 @@ title: Covid-19 Case Prediction in USA
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
-The numerical predictions are available in the https://github.com/tahmid-usc/covidGP/tree/master/prediction/cases
+The predictions CSV files are available at the https://github.com/tahmid-usc/covidGP/tree/master/prediction/cases
 
 ```{r, echo=FALSE}
 library(dplyr)

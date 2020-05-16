@@ -6,7 +6,7 @@ title: Covid-19 Deaths Prediction in USA
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
-The numerical predictions are available in the [Github website] (https://github.com/tahmid-usc/covidGP/tree/master/docs/deaths)  
+The predictions CSV files are available at the https://github.com/tahmid-usc/covidGP/tree/master/prediction/deaths
 
 ```{r, echo=FALSE}
 library(dplyr)
@@ -212,10 +212,6 @@ covidGP("Massachusetts")
 
 ```{r, results='hide'}
 covidGP("Michigan")
-```
-
-```{r, results='hide'}
-covidGP("South Carolina")
 ```
 
 ```{r, results='hide'}
