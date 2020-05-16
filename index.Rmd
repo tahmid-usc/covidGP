@@ -1,17 +1,13 @@
 ---
-title: Covid-19 Confirmed case Prediction Using Gaussian Process Regression with Richard's
+title: Covid-19 Case Prediction Using Gaussian Process Regression with Richard's
   Growth Curve Prior
-author: "Tahmidul Islam"
-date: "5/8/2020"
-output: html_document
 ---
 
 ```{r setup, include= FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
-## Covid-19 Confirmed case Predictionr
-
+The numerical predictions are available in the [Github website] (https://github.com/tahmid-usc/covidGP/tree/master/docs/prediction)  
 
 ```{r, echo=FALSE}
 library(dplyr)
@@ -28,9 +24,9 @@ covidGP <- function(State = "South Carolina") {
   # Read data and transform date and cases
   # change state name as desired
   
-  covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
-  covid$date <- as.Date(covid$date)
-  covid <- covid %>% filter(state == State) 
+  #covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
+  #covid$date <- as.Date(covid$date)
+  covid <- covid_data(State)
   mindate <- as.numeric(min(covid$date))
   covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
   
@@ -105,6 +101,6 @@ covidGP <- function(State = "South Carolina") {
 
 
 ```{r, results='hide'}
-covidGP("Ohio")
+covidGP("US")
 ```
 

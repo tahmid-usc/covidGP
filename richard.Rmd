@@ -14,9 +14,8 @@ The numerical predictions are available in the [Github website] (https://github.
 
 ```{r, echo=FALSE}
 #prior mean function (Richards growth equation)
-#prior mean function (Richards growth equation)
 mu <- function(t, a = 1, b0 = 1, b1 = 1, v = 1) {
-  a / (1 + b0 * exp(- b1 * t))^v
+  a / (1 + v * exp(- b1 * (t - b0)))^(1/v)
 }
 
 # RBF kernel
@@ -72,7 +71,7 @@ Hyper.ms <- function(x, y) {
     -dmvnorm(x = y, mean = mu(x, a = theta[4], b0 = theta[5], b1 = theta[6], v= theta[7]),  sigma = k + theta[3]^2 * diag(n), log = T)
   }
   
-  hyp <- multistart(parmat=parmat, fn = marlik, method = 'BFGS',
+  hyp <- multistart(parmat=parmat, fn = marlik, method = 'Nelder-Mead',
                     control=list(maxit = 500000, trace = 0))
   #print(hyp)
   return(hyp)
