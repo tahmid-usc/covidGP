@@ -4,7 +4,7 @@ title: "COVID-19 Total Cases and Deaths Projection"
 
 ## Application of Gaussian Process Regression with Richard's Curve Prior
 
-Navigate using buttons above to view total cases and deaths projections.
+*Navigate using the buttons above to view total cases and deaths projections.*
 
 ### Gaussian Process Model
 
