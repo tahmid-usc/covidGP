@@ -1,9 +1,7 @@
 ---
-title: "covidGP"
+title: "Case prediction"
 ---
 
-
----
 ## Application of Gaussian Process Regression with Richard's Growth Curve Prior
 
 This project aims at building a forecast model for cumulative COVID-19 cases in USA.
@@ -27,8 +25,6 @@ f(\cdot) \sim \mathcal{GP}(\mu, K) \\
 \end{align*}
 
 Here $K$ is the kernel function, usually chosen to be Gaussian and used in this work. We have used numerical optimization with multiple starts to estimate the marginal likelihood function to estimate all the parameters in the model. The posterior predictive distribution was derived and the mean of this distribution is used as the point estimate/forecast of the response. The diagonal of the posterior covariance was used to construct the credible error band.
-
-A sample projection of cumulative number of confirmed cases for South Carolina is shown.
 
 
 
