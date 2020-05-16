@@ -1,4 +1,4 @@
-##COVID-19 Case and Death in USA Projection
+## COVID-19 Case and Death in USA Projection
 
 Author: Tahmidul Islam
 
