@@ -11,7 +11,7 @@
 
 
 
-<title>index</title>
+<title>Application of Gaussian Process Regression with Richard’s Growth Curve Prior</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -289,13 +289,25 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">index</h1>
+<h1 class="title toc-ignore">Application of Gaussian Process Regression with Richard’s Growth Curve Prior</h1>
 
 </div>
 
 
-<div id="welcome" class="section level2">
-<h2>Welcome</h2>
+<p>This project aims at building a forecast model for cumulative COVID-19 cases in USA.</p>
+<div id="gaussian-process-model" class="section level3">
+<h3>Gaussian Process Model</h3>
+<p>Parametric nonlinear growth curve models have been used to model COVID-19 cumulative confirmed cases and deaths with data obtained from all over the world. Logistic curve (Verhulst, 1838), generalized logistic curve, Richard’s curve(Richards (1959)), Gompertz curve (Gompertz, 1825; Winsor, 1932), cumulative distribution function method etc. were applied by various researchers to fit the COVID-19 data and forecast the trend in the future. The forecast is tremendously important to assess and configure emergency life saving resources like PPE, ventilator, medical supply and medicine.</p>
+<p>The parametric models are somewhat rigid in terms of deviation of observed data from hypothetical model. If parametric assumption is violated then the usefulness of the model declines specially for forecasting purpose. But completely nonparametric model also suffers from the inability to make valid prediction outside the support of the data.</p>
+<p>Here we propose a Bayesian nonlinear regression model using Gaussian process regression where we have incorporated a modified Richard’s curve as the prior mean function propagating our belief about the shape of the growth curve. But this model allows deviation from the parametric model by updating the prior with observed data. The used modified Richad’s curve is:</p>
+<p><span class="math display">\[ \mu(t) = \frac{A}{(1 + B_0 e^{(- B_1 t)})^v}.\]</span></p>
+<p>Here, <span class="math inline">\(\mu(t)\)</span> is the cumulative number of cases/deaths at time <span class="math inline">\(t\)</span>. <span class="math inline">\(A, B_0, B_1,\)</span> and <span class="math inline">\(v\)</span> are the parameters of this nonlinear growth function. We use this as the prior mean function in GP regression framework.</p>
+<p><span class="math display">\[\begin{align*}
+Y(t) = f(t) + \varepsilon \\
+f(\cdot) \sim \mathcal{GP}(\mu, K) \\
+\varepsilon \sim N(0, \sigma^2)
+\end{align*}\]</span></p>
+<p>Here <span class="math inline">\(K\)</span> is the kernel function, usually chosen to be Gaussian and used in this work. We have used numerical optimization with multiple starts to estimate the marginal likelihood function to estimate all the parameters in the model. The posterior predictive distribution was derived and the mean of this distribution is used as the point estimate/forecast of the response. The diagonal of the posterior covariance was used to construct the credible error band.</p>
 </div>
 
 
