@@ -1,11 +1,14 @@
 ---
 title: Covid-19 Deaths Prediction in USA
+fig_width: 12 
+fig_height: 4 
 ---
 
 ```{r setup, include= FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
+Updated on `today()`.
 The predictions CSV files are available at the https://github.com/tahmid-usc/covidGP/tree/master/prediction/deaths
 
 ```{r, echo=FALSE}
@@ -15,6 +18,7 @@ library(readr)
 library(optimx)
 library(kernlab)
 library(mvtnorm)
+library(ggplot2)
 source('code/functions.R')
 
 
@@ -23,12 +27,12 @@ source('code/functions.R')
 covid_data <- function (State  = 'South Carolina') {
   covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
   if(State == "US"){
-    # Total USA: transform date and cases
+    # Total USA: transform date and deaths
     covid$date <- as.Date(covid$date)
     covid.total <- covid %>% group_by(date) %>% summarize(deaths = sum(deaths)) 
     covid <- covid.total}
   else{
-    # Read data and transform date and cases
+    # Read data and transform date and deaths
     # change state name as desired
     print(State)
     covid$date <- as.Date(covid$date)
@@ -43,11 +47,9 @@ covid_data <- function (State  = 'South Carolina') {
 
 
 covidGP <- function(State = "South Carolina") {
-  # Read data and transform date and cases
+  # Read data and transform date and deaths
   # change state name as desired
-  
-  #covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
-  #covid$date <- as.Date(covid$date)
+
   covid <- covid_data(State)
   mindate <- as.numeric(min(covid$date))
   covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = deaths / max(deaths))
@@ -91,32 +93,24 @@ covidGP <- function(State = "South Carolina") {
   
   #print('Posterior distribution computed')
   
-
-  #plot predictions
-  plot(datestar, posmu, lwd = 3, type = 'l', col = 2, main = paste('Cumulative COVID-19 Deaths Prediction for', State), xaxt = 'n', ylim = c(0, max(ul)), xlab = "Day", ylab = 'Cumulative Deaths')
-  polygon(c(datestar,rev(datestar)),c(ll,rev(ul)),col=rgb (.1,.1,.1,.2),border=NA, xaxt = 'n')
-  lines(datestar, posmu, lwd = 3, col = 2, xaxt = 'n')
-  axis.Date(x = datestar, side = 1, format = '%m-%d', at = datestar)
-  points(covid$date, covid$y * max(covid$deaths), cex = 1.2)
-  lines(datestar, mustar.pred, lwd = 3)
-  legend('bottomright', c('Parametric fit', 'Posterior Mean'), lty = 1, 
-         lwd = 3, col = 1:2, bty = 'n')
-  
   preddt <- data.frame(pred_date = datestar, posterior_mean = posmu, parametric_fit = mustar.pred, lower = ll, upper = ul)
   write.csv(preddt, file = paste0('prediction/deaths/', State, '.csv'), row.names = F)
   save(theta.sort, file = paste0('data/deaths/', 'theta_', State, '.Rdata'))
-
-  png(file =  paste0('plot/deaths/', State, '.png'))
+  
+  
   #plot predictions
-  plot(datestar, posmu, lwd = 3, type = 'l', col = 2, main = paste('Cumulative COVID-19 Deaths Prediction for', State), xaxt = 'n', ylim = c(0, max(ul)), xlab = "Day", ylab = 'Cumulative Deaths')
-  polygon(c(datestar,rev(datestar)),c(ll,rev(ul)),col=rgb (.1,.1,.1,.2),border=NA, xaxt = 'n')
-  lines(datestar, posmu, lwd = 3, col = 2, xaxt = 'n')
-  axis.Date(x = datestar, side = 1, format = '%m-%d', at = datestar)
-  points(covid$date, covid$y * max(covid$deaths), cex = 1.2)
-  lines(datestar, mustar.pred, lwd = 3)
-  legend('bottomright', c('Parametric fit', 'Posterior Mean'), lty = 1, 
-         lwd = 3, col = 1:2, bty = 'n')
-  dev.off()
+  maxVal <- round(theta[4] * max(covid$deaths),0)
+  ggplot(data = preddt, aes(x = pred_date, y = posterior_mean)) +
+  geom_line(aes(x = pred_date, y = parametric_fit, colour = "Parametric Fit"), size = 1.2) +
+  geom_smooth(aes(ymin = lower, ymax = upper), stat = "identity", fill = "skyblue") +   
+  geom_line(size = 1.2, aes( colour = "Posterior Mean"), alpha = .9) +
+  scale_x_date(date_breaks = "week", date_labels = "%b %d") +
+  geom_point(data = covid, aes(x = date, y = deaths), size = 2, colour = 1 , alpha = .5) + 
+  geom_hline(yintercept = theta[4] * max(covid$deaths), colour = "grey30") +
+  annotate("text", x = min(covid$date) + 7, y = .99 * maxVal , label = maxVal, colour = "grey30") +
+  labs(x = "Date", y = "Total Deaths", colour = "") + ggtitle(paste('Cumulative COVID-19 Deaths Prediction for', State)) + 
+  ggsave(filename = paste0('plot/deaths/', State, '.png'), height = 4, width = 12)
+
 }
 
 ```
@@ -134,6 +128,7 @@ covidGP("Alabama")
 ```{r, results='hide'}
 covidGP("Alaska")
 ```
+
 ```{r, results='hide'}
 covidGP("Arizona")
 ```

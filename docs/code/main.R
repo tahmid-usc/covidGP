@@ -2,13 +2,15 @@ library(dplyr)
 library(lubridate)
 library(readr)
 library(optimx)
+library(ggplot2)
 library(kernlab)
 library(mvtnorm)
 source('code/functions.R')
 
 covid <- covid_data("Ohio")
 mindate <- as.numeric(min(covid$date))
-covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
+maxNum <- max(covid$cases)
+covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / maxNum)
 
 
 
@@ -67,13 +69,13 @@ posmu <- mustar.pred + posmu
 possigma <- kxx - kx %*% (kinv %*% t(kx))
 #diag(possigma)[diag(sigma)<0] <- 0
 
-posmu <- posmu * max(covid$cases)
-mustar.pred <- mustar.pred * max(covid$cases)
-ll <- posmu - 1.96 * sqrt(diag(possigma)) * max(covid$cases)
-ul <- posmu + 1.96 * sqrt(diag(possigma)) * max(covid$cases)
+posmu <- posmu * maxNum
+mustar.pred <- mustar.pred * maxNum
+ll <- posmu - 1.96 * sqrt(diag(possigma)) * maxNum
+ul <- posmu + 1.96 * sqrt(diag(possigma)) * maxNum
 
 
-preddt <- data.frame(posmu, mustar.pred, ll, ul)
+preddt <- data.frame(pred_date = datestar, posterior_mean = posmu, parametric_fit = mustar.pred, lower = ll, upper = ul)
 #save(preddt, file = 'pred_SC_v.csv')
 
 
@@ -86,5 +88,21 @@ points(covid$date, covid$y * max(covid$cases), cex = 1.2)
 lines(datestar, mustar.pred, lwd = 3)
 legend('bottomright', c('Parametric fit', 'Posterior Mean'), lty = 1, 
        lwd = 3, col = 1:2, bty = 'n')
+#_----------
+#ggoplot
 
+
+maxVal <- round(theta[4] * maxNum,0)
+
+
+ggplot(data = preddt, aes(x = pred_date, y = posterior_mean)) +
+  geom_line(aes(x = pred_date, y = parametric_fit, colour = "Parametric Fit"), size = 1.2) +
+  geom_smooth(aes(ymin = lower, ymax = upper), stat = "identity", fill = "skyblue") +   
+  geom_line(size = 1.2, aes( colour = "Posterior Mean"), alpha = .9) +
+  scale_x_date(date_breaks = "week", date_labels = "%b %d") +
+  geom_point(data = covid, aes(x = date, y = cases), size = 2, colour = 1 , alpha = .5) + 
+  geom_hline(yintercept = theta[4] * max(covid$cases), colour = 'grey50') +
+  annotate("text", x = min(covid$date) , y = .99 * maxVal , label = paste(maxVal), colour = "grey30", size = 2) +
+  labs(x = "Date", y = "Total Cases", colour = "") + ggtitle("Cumulative COVID-19 cases Prediction for Ohio") + 
+  ggsave("plot/test.png", height = 4, width = 12)
 
