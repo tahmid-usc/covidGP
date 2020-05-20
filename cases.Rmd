@@ -1,14 +1,12 @@
 ---
 title: Covid-19 Confirmed Case Prediction in USA
-fig_width: 12 
-fig_height: 4 
 ---
 
 ```{r setup, include= FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
-Updated on `today()`.
+Updated on `r today()`.
 The predictions CSV files are available at the https://github.com/tahmid-usc/covidGP/tree/master/prediction/cases
 
 ```{r, echo=FALSE}
@@ -81,12 +79,11 @@ covidGP <- function(State = "South Carolina") {
   geom_line(aes(x = pred_date, y = parametric_fit, colour = "Parametric Fit"), size = 1.2) +
   geom_smooth(aes(ymin = lower, ymax = upper), stat = "identity", fill = "skyblue") +   
   geom_line(size = 1.2, aes( colour = "Posterior Mean"), alpha = .9) +
-  scale_x_date(date_breaks = "week", date_labels = "%b %d") +
-  geom_point(data = covid, aes(x = date, y = cases), size = 2, colour = 1 , alpha = .5) + 
-  geom_hline(yintercept = theta[4] * max(covid$cases), colour = "grey30") +
-  annotate("text", x = min(covid$date) + 7, y = .99 * maxVal , label = maxVal, colour = "grey30") +
+  scale_x_date(date_breaks = "2 week", date_labels = "%m-%d") +
+  geom_point(data = covid, aes(x = date, y = cases), colour = 1 , shape = 1, size = 1.1) + 
   labs(x = "Date", y = "Total Cases", colour = "") + ggtitle(paste('Cumulative COVID-19 Cases Prediction for', State)) + 
   ggsave(filename = paste0('plot/cases/', State, '.png'), height = 4, width = 12)
+
 }
 
 ```
