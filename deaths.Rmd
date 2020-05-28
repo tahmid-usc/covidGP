@@ -6,7 +6,7 @@ title: Covid-19 Deaths Prediction in USA
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, include = TRUE, verbose = FALSE)
 ```
 
-Updated on `r today()`.
+Updated on `r format(Sys.Date(), format="%B-%d-%Y")`.
 The predictions CSV files are available at the https://github.com/tahmid-usc/covidGP/tree/master/prediction/deaths
 
 ```{r, echo=FALSE}
