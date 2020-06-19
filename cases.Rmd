@@ -18,7 +18,7 @@ library(kernlab)
 library(mvtnorm)
 library(ggplot2)
 source('code/functions.R')
-
+options(scipen=5)
 
 
 covidGP <- function(State = "South Carolina") {
@@ -80,6 +80,7 @@ covidGP <- function(State = "South Carolina") {
   geom_line(aes(x = pred_date, y = parametric_fit, colour = "Parametric Fit"), size = 1.2) +
   geom_smooth(aes(ymin = lower, ymax = upper), stat = "identity", fill = "skyblue") +   
   geom_line(size = 1.2, aes( colour = "Posterior Mean"), alpha = .9) +
+  scale_y_continuous(n.breaks = 20) +
   scale_x_date(date_breaks = "2 week", date_labels = "%m-%d") +
   geom_point(data = covid, aes(x = date, y = cases), colour = 1 , shape = 1, size = 1.1) + 
   labs(x = "Date", y = "Total Cases", colour = "") + ggtitle(paste('Cumulative COVID-19 Cases Prediction for', State)) + 
@@ -89,11 +90,9 @@ covidGP <- function(State = "South Carolina") {
 
 ```
 
-
 ```{r, results='hide'}
 covidGP("US")
 ```
-
 
 ```{r, results='hide'}
 covidGP("Alabama")
@@ -102,8 +101,13 @@ covidGP("Alabama")
 ```{r, results='hide'}
 covidGP("Alaska")
 ```
+
 ```{r, results='hide'}
 covidGP("Arizona")
+```
+
+```{r, results='hide'}
+covidGP("Arkansas")
 ```
 
 ```{r, results='hide'}
@@ -182,7 +186,6 @@ covidGP("Massachusetts")
 covidGP("Michigan")
 ```
 
-
 ```{r, results='hide'}
 covidGP("Minnesota")
 ```
@@ -209,6 +212,26 @@ covidGP("Nevada")
 
 ```{r, results='hide'}
 covidGP("New Hampshire")
+```
+
+```{r, results='hide'}
+covidGP("New Jersey")
+```
+
+```{r, results='hide'}
+covidGP("New Mexico")
+```
+
+```{r, results='hide'}
+covidGP("New York")
+```
+
+```{r, results='hide'}
+covidGP("North Carolina")
+```
+
+```{r, results='hide'}
+covidGP("North Dakota")
 ```
 
 ```{r, results='hide'}
