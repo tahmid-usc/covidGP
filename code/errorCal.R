@@ -57,11 +57,14 @@ forecast_error <- function(state = 'US') {
 US.err <- forecast_error("US") 
 
 covid.us <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
-county <-  unique(covid.us$state)
+state <-  unique(covid.us$state)
+state <- sort(state[-c(51,52,53,55)])
+state <- c(state, "US")
 
-county.err <- c()
+
+state.err <- c()
 for (i in 1:length(county)) {
-  county.err <- rbind(county.err, county[i], forecast_error(county[i]))
+  county.err <- rbind(state.err, state[i], forecast_error(state[i]))
 }
 
 err.name <- c('ME',     'RMSE',      'MAE',       'MPE',     'MAPE')
@@ -80,6 +83,7 @@ err.df <- cbind(county, err.df)
 names(err.df) <- c('county', paste0('train_',err.name), paste0('test_',err.name))
 
 
+
 ggplot(data = err.df,aes(x = county, y = train_MAPE)) +
   geom_col() +
   xlab('MAPE') +
@@ -89,4 +93,12 @@ ggplot(data = err.df,aes(x = county, y = train_MAPE)) +
   
 #  ggsave('plot/cases/error/train_MAPE.png')
 
-barplot(cbind(train_MAE, test_MAE) ~ county, err.df,horiz = F, beside = T, legend = T, axisnames = T, las = 2)
+par(mar = c(12, 5, 2, 2)) # Set the margin on all sides to 2
+barplot(cbind(train_MAE, test_MAE) ~ county, err.df,horiz = F, beside = T, legend.text = c('Train', 'Test'), axisnames = T, las = 2, 
+        axes = T, col = c('cadetblue1','dodgerblue4'), border = F, ylab = 'Mean Absolute Error (MAE)', xlab = '', args.legend = list(bty = 'n'))
+
+barplot(cbind(train_RMSE, test_RMSE) ~ county, err.df,horiz = F, beside = T, legend.text = c('Train', 'Test'), axisnames = T, las = 2, 
+        axes = T, col = c('cadetblue1','dodgerblue4'), border = F, ylab = 'RMSE', xlab = '', args.legend = list(bty = 'n'))
+
+barplot(cbind(train_MAPE, test_MAPE) ~ county, err.df,horiz = F, beside = T, legend.text = c('Train', 'Test'), axisnames = T, las = 2, 
+        axes = T, col = c('cadetblue1','dodgerblue4'), border = F, ylab = 'MAPE', xlab = '', args.legend = list(bty = 'n'))
