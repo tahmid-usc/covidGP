@@ -100,6 +100,7 @@ ggplot(data = preddt, aes(x = pred_date, y = posterior_mean)) +
   geom_smooth(aes(ymin = lower, ymax = upper), stat = "identity", fill = "skyblue") +   
   geom_line(size = 1.2, aes( colour = "Posterior Mean"), alpha = .9) +
   scale_x_date(date_breaks = "week", date_labels = "%b %d") +
+  scale_y_continuous(n.breaks = 20) + 
   geom_point(data = covid, aes(x = date, y = cases), size = 1, colour = 1 , alpha = .5) + 
   geom_hline(yintercept = theta[4] * max(covid$cases), colour = 'grey50') +
   annotate("text", x = min(covid$date) , y = .99 * maxVal , label = paste(maxVal), colour = "grey30", size = 2) +

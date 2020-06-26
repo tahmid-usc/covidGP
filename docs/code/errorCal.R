@@ -54,39 +54,62 @@ forecast_error <- function(state = 'US') {
   
 }
 
-US.err <- forecast_error("US") 
-
 covid.us <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
-county <-  unique(covid.us$state)
+state <-  unique(covid.us$state)
+state <- sort(state[-c(51,52,53,55)])
+state <- c(state, "US")
 
-county.err <- c()
-for (i in 1:length(county)) {
-  county.err <- rbind(county.err, county[i], forecast_error(county[i]))
+
+state.err <- c()
+for (i in 1:length(state)) {
+  state.err <- rbind(state.err, cbind(state[i], forecast_error(state[i])))
 }
 
 err.name <- c('ME',     'RMSE',      'MAE',       'MPE',     'MAPE')
 
-#write.csv(county.err, "county_err.csv")
-
-err.mat <- matrix(county.err, nrow = 11)
-err.mat <- t(err.mat)
-head(err.mat)
-err.mat <- as.data.frame(err.mat)
-names(err.mat) <- c('county', paste0('train_',err.name), paste0('test_',err.name))
-head(err.mat)
-err.df <- apply(err.mat[,-1], 2, function(x){ as.numeric(x) })
-err.df <- as.data.frame(err.df, stringsAsFactors = F)
-err.df <- cbind(county, err.df)
-names(err.df) <- c('county', paste0('train_',err.name), paste0('test_',err.name))
+write.csv(state.err, "state_err.csv")
 
 
-ggplot(data = err.df,aes(x = county, y = train_MAPE)) +
+err.df <- data.frame(state.err[,-1])
+err.df <- apply(err.df, 2, function(x){as.numeric(x)})
+err.df <- data.frame(state, err.df)
+names(err.df) <- c('state', paste0('train_',err.name), paste0('test_',err.name))
+head(err.df)
+
+
+ggplot(data = err.df, aes(x = state, y = train_MAPE)) +
   geom_col() +
   xlab('MAPE') +
-  ylab('County') + 
+  ylab('State') + 
   scale_y_continuous(n.breaks = 20) +
   coord_flip() 
   
 #  ggsave('plot/cases/error/train_MAPE.png')
 
-barplot(cbind(train_MAE, test_MAE) ~ county, err.df,horiz = F, beside = T, legend = T, axisnames = T, las = 2)
+par(mar = c(12, 5, 2, 2)) # Set the margin on all sides to 2
+barplot(cbind(train_MAE, test_MAE) ~ state, err.df[-52,], horiz = F, beside = T, legend.text = c('Train', 'Test'), axisnames = T, las = 2, 
+        axes = T, col = c('cadetblue1','dodgerblue4'), border = F, ylab = 'Mean Absolute Error (MAE)', xlab = '', args.legend = list(bty = 'n'))
+
+barplot(cbind(train_RMSE, test_RMSE) ~ state, err.df[-52,], horiz = F, beside = T, legend.text = c('Train', 'Test'), axisnames = T, las = 2, 
+        axes = T, col = c('cadetblue1','dodgerblue4'), border = F, ylab = 'RMSE', xlab = '', args.legend = list(bty = 'n'))
+
+barplot(cbind(train_MAPE, test_MAPE) ~ state, err.df[-52,], horiz = F, beside = T, legend.text = c('Train', 'Test'), axisnames = T, las = 2, 
+        axes = T, col = c('cadetblue1','dodgerblue4'), border = F, ylab = 'MAPE', xlab = '', args.legend = list(bty = 'n'))
+
+
+# horizontal
+
+
+par(mar = c(5, 12, 2, 2)) # Set the margin on all sides to 2
+barplot(cbind(train_MAE, test_MAE) ~ state, err.df[-52,], horiz = T, beside = F, legend.text = c('Train', 'Test'), axisnames = T, las = 1, 
+        axes = T, col = c('black','red'), border = F, xlab = 'MAE', ylab = '', args.legend = list(bty = 'n'))
+
+barplot(cbind(train_RMSE, test_RMSE) ~ state, err.df[-52,], horiz = T, beside = F, legend.text = c('Train', 'Test'), axisnames = T, las = 1, 
+        axes = T, col = c('black','red'), border = F, xlab = 'RMSE', ylab = '', args.legend = list(bty = 'n'))
+
+barplot(cbind(train_MAPE, test_MAPE) ~ state, err.df[-52,], horiz = T, beside = F, legend.text = c('Train', 'Test'), axisnames = T, las = 1, 
+        axes = T, col = c('black','red'), border = F, xlab = 'MAPE', ylab = '', args.legend = list(bty = 'n'))
+
+
+
+
