@@ -1,0 +1,98 @@
+---
+title: Covid-19 Confirmed Case Prediction in USA
+---
+
+```{r setup, include= FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, include = TRUE, verbose = FALSE)
+```
+
+Updated on `r format(Sys.Date(), format="%B-%d-%Y")`.
+The predictions CSV files are available at the https://github.com/tahmid-usc/covidGP/tree/master/prediction/cases
+
+```{r, echo=FALSE}
+library(dplyr)
+library(lubridate)
+library(readr)
+library(optimx)
+library(kernlab)
+library(mvtnorm)
+library(ggplot2)
+source('code/functions.R')
+options(scipen=5)
+
+
+covidGP <- function(State = "South Carolina") {
+  # Read data and transform date and cases
+  # change state name as desired
+  
+  #covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
+  #covid$date <- as.Date(covid$date)
+  covid <- covid_data(State)
+  mindate <- as.numeric(min(covid$date))
+  covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
+  
+  #print('Data Loaded')
+  #Estimate hyperparamters (multistarts) (works better)
+  #theta <- Hyper(x = covid$t, y = covid$y)
+  invisible(capture.output(theta.ms <- Hyper.ms(x = covid$t, y = covid$y))) 
+  theta.sort <- theta.ms[order(theta.ms$value),]
+  theta <- theta.sort[1,1:7] #might change set of values if the best doesnt work well
+  theta <- as.numeric(theta)
+  
+  #print('Hyperparameters estimated')
+  #---------- If hyperparamters are okay then do final prediction
+  
+  datestar <- covid$date
+  datestar <- c(datestar, seq.Date(from = max(datestar), by = "day", length.out = 90))
+  tstar <- (as.numeric(datestar) - mindate)/100
+  
+  mu.pred <- mu(covid$t,a = theta[4], b0 = theta[5], b1 = theta[6], v = theta[7])
+  mustar.pred <- mu(tstar,a = theta[4], b0 = theta[5], b1 = theta[6], v = theta[7])
+  
+  
+  n <- length(covid$t)
+  nx <- length(tstar)
+  kx <- ker2(x = tstar, y = covid$t, l = theta[1], sigf = theta[2])
+  kxx <- ker(x = tstar, l = theta[1], sigf = theta[2]) + theta[3]^2 * diag(nx)
+  k <- ker(x = covid$t, l = theta[1], sigf = theta[2]) + theta[3]^2 * diag(n)
+  kinv <- chol2inv(chol(k))
+  posmu <- kx %*% (kinv %*% matrix(covid$y - mu.pred, ncol = 1))
+  posmu <- mustar.pred + posmu
+  
+  
+  possigma <- kxx - kx %*% (kinv %*% t(kx))
+  #diag(possigma)[diag(sigma)<0] <- 0
+  
+  posmu <- posmu * max(covid$cases)
+  mustar.pred <- mustar.pred * max(covid$cases)
+  ll <- posmu - 1.96 * sqrt(diag(possigma)) * max(covid$cases)
+  ul <- posmu + 1.96 * sqrt(diag(possigma)) * max(covid$cases)
+  
+  #print('Posterior distribution computed')
+  
+  preddt <- data.frame(pred_date = datestar, posterior_mean = posmu, parametric_fit = mustar.pred, lower = ll, upper = ul)
+  #write.csv(preddt, file = paste0('prediction/cases/', State, '.csv'), row.names = F)
+  #save(theta.sort, file = paste0('data/cases', 'theta_', State, '.Rdata'))
+  
+  #plot predictions
+  maxVal <- round(theta[4] * max(covid$cases),0)
+  predplot <- ggplot(data = preddt, aes(x = pred_date, y = posterior_mean)) +
+  geom_line(aes(x = pred_date, y = parametric_fit, colour = "Parametric Fit"), size = 1.2) +
+  geom_smooth(aes(ymin = lower, ymax = upper), stat = "identity", fill = "skyblue") +   
+  geom_line(size = 1.2, aes( colour = "Posterior Mean"), alpha = .9) +
+  scale_y_continuous(n.breaks = 20) +
+  scale_x_date(date_breaks = "2 week", date_labels = "%m-%d") +
+  geom_point(data = covid, aes(x = date, y = cases), colour = 1 , shape = 1, size = 1.1) + 
+  labs(x = "Date", y = "Total Cases", colour = "") + ggtitle(paste('Cumulative COVID-19 Cases Prediction for', State)) #+ 
+#  ggsave(filename = paste0('plot/cases/', State, '.png'), height = 4, width = 12)
+  
+  result <- paste('Carrying capacity =', theta[4] * maxVal, 'Growth rate =', theta[6], 'Time to inflection point =', theta[7])
+  
+  return(list(predplot, result))
+}
+
+```
+
+```{r}
+covidGP("Alaska")
+```

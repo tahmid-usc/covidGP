@@ -2,18 +2,24 @@
 
 ker <- function(x, l, sigf) {
   rbf <- rbfdot(sigma = 1/l^2)
-  return(sigf^2 * kernelMatrix(rbf, x = x))
+  return(sigf^2 * kernelMatrix(rbf, x = x) +.00000001) 
 }
 
 ker2 <- function(x, y, l, sigf) {
   rbf <- rbfdot(sigma = 1/l^2)
-  return(sigf^2 * kernelMatrix(rbf, x = x, y = y))
+  return(sigf^2 * kernelMatrix(rbf, x = x, y = y) + .00000001) 
 }
 
 
 #prior mean function (Richards growth equation)
 mu <- function(t, a = 1, b0 = 1, b1 = 1, v = 1) {
   a / (1 + b0 * exp(- b1 * t))^v
+}
+
+
+#prior mean function (Richards growth equation)
+mu <- function(t, a = 1, b0 = 1, b1 = 1, v = 1) {
+  a * ( 1 + (b0 - 1) * exp(- b1 * (t-v)) )^(1/(1 - b0))
 }
 
 
