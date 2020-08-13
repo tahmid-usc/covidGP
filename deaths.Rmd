@@ -48,7 +48,7 @@ covidGP <- function(State = "South Carolina") {
   # Read data and transform date and deaths
   # change state name as desired
 
-  covid <- covid_data(State)
+  covid <- covid_data(State) %>% filter(date <= '2020-07-01')
   mindate <- as.numeric(min(covid$date))
   covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = deaths / max(deaths))
   

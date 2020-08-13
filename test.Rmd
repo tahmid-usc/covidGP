@@ -27,10 +27,10 @@ covidGP <- function(State = "South Carolina") {
   
   #covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
   #covid$date <- as.Date(covid$date)
-  covid <- covid_data(State)
-  mindate <- as.numeric(min(covid$date))
+  covid <- covid_data(State) %>% filter(date <= '2020-07-01')
+  mindate <- as.numeric(min(covid$date)) 
   covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
-  
+
   #print('Data Loaded')
   #Estimate hyperparamters (multistarts) (works better)
   #theta <- Hyper(x = covid$t, y = covid$y)
@@ -94,5 +94,5 @@ covidGP <- function(State = "South Carolina") {
 ```
 
 ```{r}
-covidGP("Alaska")
+covidGP("South Carolina")
 ```

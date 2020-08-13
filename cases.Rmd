@@ -27,7 +27,7 @@ covidGP <- function(State = "South Carolina") {
   
   #covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
   #covid$date <- as.Date(covid$date)
-  covid <- covid_data(State)
+  covid <- covid_data(State) %>% filter(date <= '2020-07-01')
   mindate <- as.numeric(min(covid$date))
   covid <- covid %>% mutate(t = (as.numeric(date) - mindate)/100, y = cases / max(cases))
   
